@@ -10,7 +10,9 @@ export type GameConnectionStatus = 'connecting' | 'connected' | 'reconnecting' |
 export function subscribeToGameState(
   sessionId: string,
   onStateUpdate: (state: GameState) => void,
-  onStatusChange?: (status: GameConnectionStatus) => void
+  onStatusChange?: (status: GameConnectionStatus) => void,
+  onPresenceJoin?: (presences: { ownerToken?: string }[]) => void,
+  onPresenceLeave?: (presences: { ownerToken?: string }[]) => void,
 ): RealtimeChannel {
   const supabase = createClient()
   const channel = supabase.channel(`game:${sessionId}`, {
@@ -20,6 +22,18 @@ export function subscribeToGameState(
   channel.on('broadcast', { event: BROADCAST_EVENT }, ({ payload }) => {
     onStateUpdate(payload as GameState)
   })
+
+  if (onPresenceJoin) {
+    channel.on('presence', { event: 'join' }, ({ newPresences }) => {
+      onPresenceJoin(newPresences as { ownerToken?: string }[])
+    })
+  }
+
+  if (onPresenceLeave) {
+    channel.on('presence', { event: 'leave' }, ({ leftPresences }) => {
+      onPresenceLeave(leftPresences as { ownerToken?: string }[])
+    })
+  }
 
   onStatusChange?.('connecting')
   channel.subscribe(status => {

@@ -146,25 +146,22 @@ export function useGameSync(sessionId: string): GameSyncState {
           channelRef.current?.track({ ownerToken: token })
           dispatchConnect(token, true)
         }
-      }
-    )
-
-    // Presence: detect when other players join or leave the Realtime channel
-    channelRef.current
-      .on('presence', { event: 'join' }, ({ newPresences }) => {
+      },
+      presences => {
         if (!isActive) return
-        for (const p of newPresences as { ownerToken?: string }[]) {
+        for (const p of presences) {
           if (p.ownerToken && p.ownerToken !== token) {
             dispatchConnect(p.ownerToken, true)
           }
         }
-      })
-      .on('presence', { event: 'leave' }, ({ leftPresences }) => {
+      },
+      presences => {
         if (!isActive) return
-        for (const p of leftPresences as { ownerToken?: string }[]) {
+        for (const p of presences) {
           if (p.ownerToken) dispatchConnect(p.ownerToken, false)
         }
-      })
+      },
+    )
 
     void hydrateState(sessionId)
       .then(state => {
