@@ -151,7 +151,7 @@ export function LobbyRoom({ sessionId }: Props) {
       )
       const gameState = createInitialGameState(session, lobbyPlayers, decksByToken, allowSpectators)
       await initializeGame(sessionId, gameState)
-      // Redirect is triggered by the subscription detecting status='active'
+      router.push(`/game/${sessionId}`)
     } catch {
       setIsStarting(false)
     }
