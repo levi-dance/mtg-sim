@@ -30,7 +30,12 @@ export default function DecksPage() {
   return (
     <div className="max-w-3xl mx-auto w-full p-6 flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-[#d4a843]">My Decks</h1>
+        <div className="flex items-center gap-4">
+          <Link href="/lobby" className="text-zinc-400 hover:text-zinc-200 text-sm">
+            ← Lobby
+          </Link>
+          <h1 className="text-2xl font-semibold text-[#d4a843]">My Decks</h1>
+        </div>
         <div className="flex items-center gap-2">
           <Link
             href="/decks/import"

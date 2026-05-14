@@ -109,6 +109,12 @@ export function DeckBuilder({ initialDeck, ownerToken }: Props) {
       {/* Header */}
       <div className="flex items-center gap-3 flex-wrap">
         <button
+          onClick={() => router.push('/lobby')}
+          className="text-zinc-400 hover:text-zinc-200 text-sm shrink-0"
+        >
+          ← Lobby
+        </button>
+        <button
           onClick={() => router.push('/decks')}
           className="text-zinc-400 hover:text-zinc-200 text-sm shrink-0"
         >
